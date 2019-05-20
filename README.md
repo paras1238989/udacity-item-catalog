@@ -21,14 +21,9 @@ This program uses third-party auth with Google. Some of the technologies used to
 - SQLAchemy
 - Google OAuth2
 
-## Some things you might need
-- [Vagrant](https://www.vagrantup.com/)
-- [Udacity Vagrantfile](https://github.com/udacity/fullstack-nanodegree-vm)
-- [VirtualBox](https://www.virtualbox.org/wiki/Downloads)
 
 ## Getting Started
 
-# Steps to run the program
 1. Download and install Vagrant and VirtualBox.
 2. Files for vagrant can be downloaded from https://s3.amazonaws.com/video.udacity-data.com/topher/2018/April/5acfbfa3_fsnd-virtual-machine/fsnd-virtual-machine.zip - This will help you install PostgreSQL, Python and other dependencies on the VM.
 3. Start the Ubuntu Virtual Machine(VM) using : vagrant up
