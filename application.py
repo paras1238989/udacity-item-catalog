@@ -285,46 +285,50 @@ def gconnect():
     # Obtain authorization code
     code = request.data
     token = request.data
-    #Request an access token from google API
-    idinfo = id_token.verify_oauth2_token(code,google_requests.Request(),CLIENT_ID)
-    #Trigger the Google url and receive the token
+    # Request an access token from google API
+    idinfo = id_token.verify_oauth2_token(
+                 code,
+                 google_requests.Request(),
+                 CLIENT_ID)
+    # Trigger the Google url and receive the token
     url = ('https://oauth2.googleapis.com/tokeninfo?id_token=%s' % token)
     h = httplib2.Http()
     result = json.loads(h.request(url, 'GET')[1])
 
     if result.get('error') is not None:
-	response = make_response(json.dumps(result.get('error')), 500)
-	response.headers['Content-Type'] = 'application/json'
-	return response
+        response = make_response(json.dumps(result.get('error')), 500)
+        response.headers['Content-Type'] = 'application/json'
+        return response
 
-    #Verify that the access token is used for the intended user
+    # Verify that the access token is used for the intended user
     user_google_id = idinfo['sub']
     if result['sub'] != user_google_id:
-	response = make_response(
-		json.dumps("Token's user id does not match given user id"),
-		401
-	)
-	response.headers['Content-Type'] = 'application/json'
-	return response
-
-    if result['aud'] != CLIENT_ID:
         response = make_response(
-                json.dumps("Token's client id does not match app's"),
-                401
+            json.dumps("Token's user id does not match given user id"),
+            401
         )
         response.headers['Content-Type'] = 'application/json'
         return response
 
-    #Check if user already logged in
+    if result['aud'] != CLIENT_ID:
+        response = make_response(
+            json.dumps("Token's client id does not match app's"),
+            401
+        )
+        response.headers['Content-Type'] = 'application/json'
+        return response
+
+    # Check if user already logged in
     stored_access_token = login_session.get('access_token')
     stored_user_google_id = login_session.get('user_google_id')
-    if stored_access_token is not None and user_google_id == stored_user_google_id:
-	response = make_response(
-	    json.dumps('Current user is already connected'),200
-	)
-	response.headers['Content-Type'] = 'application/json'
-	return response
+    if (stored_access_token is not None and
+            user_google_id == stored_user_google_id):
 
+        response = make_response(
+            json.dumps('Current user is already connected'), 200
+        )
+        response.headers['Content-Type'] = 'application/json'
+        return response
 
     # Store the access token in the session for later use.
     login_session['access_token'] = idinfo
@@ -372,7 +376,7 @@ def gdisconnect():
     if result['status'] == '200':
         # reset the user's session
         del login_session['credentials']
-	del login_session['access_token']
+        del login_session['access_token']
         del login_session['gplus_id']
         del login_session['username']
         del login_session['email']
@@ -395,7 +399,7 @@ def getUserID(email):
     try:
         user = session.query(User).filter_by(email=email).one()
         return user.id
-    except:
+    except Exception as e:
         return None
 
 
@@ -444,4 +448,4 @@ def disconnect():
 if __name__ == '__main__':
     app.secret_key = 'super_secret_key'
     app.debug = True
-    app.run(host='0.0.0.0', port=5000, threaded = False)
+    app.run(host='0.0.0.0', port=5000, threaded=False)
