@@ -226,7 +226,8 @@ def editCatalogItem(category_id, catalog_item_id):
         if request.form['price']:
             editedItem.price = request.form['price']
         if request.form['category']:
-            editedItem.category = request.form['category']
+            print editedItem.category
+            editedItem.category.id = request.form['category']
         session.add(editedItem)
         session.commit()
         flash("Catalog item updated!", 'success')

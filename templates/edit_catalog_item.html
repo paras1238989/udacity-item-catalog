@@ -12,15 +12,15 @@
 			<form method = "post">
 				<div class="form-group">
 					<label for="name">Name:</label>
-					<input type ="text" maxlength="50" class="form-control" name="name" value="{{ item.name }}">
+					<input type ="text" maxlength="50" class="form-control" name="name" value="{{ item.name }}" required>
 					<label for="description">Description:</label>
-					<textarea class="form-control" maxlength="250" rows="3" name="description">{{ item.description }}
+					<textarea class="form-control" maxlength="250" rows="3" name="description" required>{{ item.description }}
 					</textarea>
 
 					<label for="price">Price:</label>
 					<div class="input-group">
 						<div class="input-group-addon">$</div>
-						<input type ="text" class="form-control" maxlength="10" name="price" value="{{ item.price }}">
+						<input type ="text" class="form-control" maxlength="10" name="price" value="{{ item.price }}" required>
 					</div>
 					{% include "category_form_list.html" %}
 					<button type="submit" class="btn btn-success" id="submit" type="submit">
